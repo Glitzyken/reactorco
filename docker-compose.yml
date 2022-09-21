@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  mongodb:
+    image: 'mongo'
+    container_name: mongodb
+    ports:
+      - '27017:27017'
+    volumes:
+      - data:/data/db
+  reactorco:
+    build: ./
+    container_name: reactorco
+    ports:
+      - '4000:4000'
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    env_file:
+      - ./.env
+    restart: 'on-failure'
+    command: ['npm', 'run', 'dev']
+    depends_on:
+      - mongodb
+volumes:
+  data:
